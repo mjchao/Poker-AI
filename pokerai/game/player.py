@@ -56,7 +56,22 @@ class Player(object):
   """
 
   def __init__(self):
-    pass
+    self._hole_cards = []
+
+  def SetHoleCards(self, hole_cards):
+    """Sets the hole cards this player has.
+
+      Must either be [] indicating no current deal, or must be a list of two
+      cards.
+
+      Args:
+        (list of int) List of 0 or 2 cards. The ints are the deuces library
+          representation of cards.
+    """
+    if len(hole_cards) != 0 and len(hole_cards) != 2:
+      raise ValueError(
+          "Invalid hole cards. Must be 0 or 2 hole cards. You provided %d hole "
+          "cards." %(len(hole_cards)))
 
   def OnFolded(self, deal_data, event):
     """Callback for when another player folds.

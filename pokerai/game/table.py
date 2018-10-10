@@ -19,5 +19,5 @@ class Table(object):
       dealer_idx: (int) The player who should begin as the dealer.
     """
     self._players = players
-    self._round = pokerai.game.deal.Deal(dealer_idx)
+    self._deal = pokerai.game.deal.Deal(players, dealer_idx)
 
