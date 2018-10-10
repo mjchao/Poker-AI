@@ -1,4 +1,4 @@
-"""Various events that may happen in a poker round.
+"""Various events that may happen in a poker deal.
 """
 
 class PlayerEvent(object):

@@ -17,7 +17,7 @@ class Player(object):
     * The money the player has.
     * Hooks for events where another player folds, checks, calls, bets, raises,
       and for requesting the player to make a decision and for notifying when
-      the round is over.
+      the deal is over.
 
     The player always folds.
   """
@@ -25,73 +25,73 @@ class Player(object):
   def __init__(self):
     pass
 
-  def OnFolded(self, round_data, event):
+  def OnFolded(self, deal_data, event):
     """Callback for when another player folds.
 
     Args:
-      round_data: (RoundData) Details of the current round after the player
+      deal_data: (Deal) Details of the current deal after the player
         folded.
       event: (Event) Details about the fold.
     """
     pass
 
-  def OnChecked(self, round_data, event):
+  def OnChecked(self, deal_data, event):
     """Callback for when another player checks.
 
     Args:
-      round_data: (RoundData) Details of the current round after the player
+      deal_data: (Deal) Details of the current deal after the player
         checked.
       event: (Event) Details about the check.
     """
     pass
 
-  def OnCalled(self, round_data, event):
+  def OnCalled(self, deal_data, event):
     """Callback for when another player calls.
 
     Args:
-      round_data: (RoundData) Details of the current round after the player
+      deal_data: (Deal) Details of the current deal after the player
         called.
       event: (Event) Details about the call.
     """
     pass
 
-  def OnBet(self, round_data, event):
+  def OnBet(self, deal_data, event):
     """Callback for when another player bet.
 
     Args:
-      round_data: (RoundData) Details of the current round after the player
+      deal_data: (Deal) Details of the current deal after the player
         bet.
       event: (Event) Details about the bet.
     """
     pass
 
-  def OnRaised(self, round_data, event):
+  def OnRaised(self, deal_data, event):
     """Callback for when another player makes a decision.
 
     Args:
-      round_data: (RoundData) Details of the current round after the player
+      deal_data: (Deal) Details of the current deal after the player
         raised.
       event: (Event) Details about the raise.
     """
     pass
 
-  def MakeDecision(self, round_data):
+  def MakeDecision(self, deal_data):
     """Callback for when it's time for the player to make a decision.
 
     Args:
-      round_data: (RoundData) Details of the current round.
+      deal_data: (Deal) Details of the current deal.
 
     Return:
       (Action) FOLD, CALL, CHECK, BET, or RAISE.
     """
     return Action.FOLD
 
-  def OnRoundOver(self, round_data, event):
-    """Callback for when the round is over.
+  def OndealOver(self, deal_data, event):
+    """Callback for when the deal is over.
 
     Args:
-      round_data: (RoundData) Details of the current round.
-      event: (Event) Details about the ending of the round (i.e. who won)
+      deal_data: (Deal) Details of the current deal.
+      event: (Event) Details about the ending of the deal (i.e. who won)
     """
     pass
 

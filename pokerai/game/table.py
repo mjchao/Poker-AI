@@ -1,6 +1,6 @@
 """Contains logic for everything going on at a poker table.
 """
-import pokerai.game.round
+import pokerai.game.deal
 import random
 
 class Table(object):
@@ -19,5 +19,5 @@ class Table(object):
       dealer_idx: (int) The player who should begin as the dealer.
     """
     self._players = players
-    self._round = pokerai.game.round.Round(dealer_idx)
+    self._round = pokerai.game.deal.Deal(dealer_idx)
 
