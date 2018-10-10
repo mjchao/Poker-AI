@@ -1,7 +1,7 @@
 """Contains logic for players at a poker table
 """
 
-class Action(object);
+class Action(object):
   """Enum for actions a player can make.
   """
   FOLD = 1
@@ -12,12 +12,14 @@ class Action(object);
 
 
 class Player(object):
-  """Abstract class representing a player:
+  """Base class representing a player:
     * The cards the player has.
     * The money the player has.
     * Hooks for events where another player folds, checks, calls, bets, raises,
       and for requesting the player to make a decision and for notifying when
       the round is over.
+
+    The player always folds.
   """
 
   def __init__(self):
