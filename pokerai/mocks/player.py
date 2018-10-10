@@ -25,7 +25,6 @@ class MockPlayer(pokerai.game.player.Player):
       "bet": pokerai.game.player.Bet,
       "raise": pokerai.game.player.Raise,
     }
-    actions = []
     return MockPlayer([(str_to_action[a] if type(a) == str else
                         str_to_action[a[0]](*a[1:]))
                       for a in action_list])

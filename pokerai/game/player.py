@@ -115,11 +115,11 @@ class Player(object):
       deal_data: (Deal) Details of the current deal.
 
     Return:
-      (Action) FOLD, CALL, CHECK, BET, or RAISE.
+      (Action) fold, call, check, bet, or raise.
     """
     return Action.FOLD
 
-  def OndealOver(self, deal_data, event):
+  def OnDealOver(self, deal_data, event):
     """Callback for when the deal is over.
 
     Args:
