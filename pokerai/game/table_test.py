@@ -14,8 +14,8 @@ class TableTest(unittest.TestCase):
     return pokerai.game.table.Table(players, 0)
 
   def testConstruction(self):
-    actions = [[pokerai.game.player.Action.FOLD], []]
-    players = [pokerai.mocks.player.MockPlayer(x) for x in actions]
+    actions = [[("bet", 10)], ["fold"]]
+    players = pokerai.mocks.player.CreateMockPlayers(actions)
     self._CreateTable(players)
 
 

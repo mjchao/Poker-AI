@@ -2,13 +2,46 @@
 """
 
 class Action(object):
-  """Enum for actions a player can make.
+  """Actions a player can take.
   """
   FOLD = 1
   CHECK = 2
   CALL = 3
   BET = 4
   RAISE = 5
+
+  def __init__(self, action):
+    if not (1 <= action and action <= 5):
+      raise ValueError("Invalid action %d. Must be between 1 and 5 inclusive"
+          %(action))
+    self._action = action
+
+
+def Fold(Action):
+  def __init__(self):
+    super(self, Fold).__init__(Action.FOLD)
+
+
+def Check(Action):
+  def __init__(self):
+    super(self, Check).__init__(Action.CHECK)
+
+
+def Call(Action):
+  def __init__(self):
+    super(self, Call).__init__(Action.CALL)
+
+
+def Bet(Action):
+  def __init__(self, amount):
+    super(self, Bet).__init__(Action.BET)
+    self._amount = amount
+
+
+def Raise(Action):
+  def __init__(self, amount):
+    super(self, Raise).__init__(Action.RAISE)
+    self._amount = amount
 
 
 class Player(object):
