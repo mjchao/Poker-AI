@@ -3,10 +3,10 @@ import pokerai.game.player
 import pokerai.game.deal
 import pokerai.mocks.player
 
-class TableTest(unittest.TestCase):
+class DealTest(unittest.TestCase):
 
   def _CreateDeal(self, players):
-    """Creates a generic table to be tested. 0 is always the dealer.
+    """Creates a generic deal to be tested. 0 is always the dealer.
 
     Args:
       players: (list of MockPlayer) Mock players for testing
@@ -14,7 +14,7 @@ class TableTest(unittest.TestCase):
     return pokerai.game.deal.Deal(players, 0)
 
   def testConstruction(self):
-    actions = [[("bet", 10)], ["fold"]]
+    actions = [[("raise", 10)], ["fold"]]
     players = pokerai.mocks.player.CreateMockPlayers(actions)
     deal = self._CreateDeal(players)
     deal.Execute()

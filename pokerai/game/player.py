@@ -16,32 +16,41 @@ class Action(object):
           %(action))
     self._action = action
 
+  def GetActionType(self):
+    return self._action
 
-def Fold(Action):
+
+class Fold(Action):
   def __init__(self):
-    super(self, Fold).__init__(Action.FOLD)
+    super(Fold, self).__init__(Action.FOLD)
 
 
-def Check(Action):
+class Check(Action):
   def __init__(self):
-    super(self, Check).__init__(Action.CHECK)
+    super(Check, self).__init__(Action.CHECK)
 
 
-def Call(Action):
+class Call(Action):
   def __init__(self):
-    super(self, Call).__init__(Action.CALL)
+    super(Call, self).__init__(Action.CALL)
 
 
-def Bet(Action):
+class Bet(Action):
   def __init__(self, amount):
-    super(self, Bet).__init__(Action.BET)
+    super(Bet, self).__init__(Action.BET)
     self._amount = amount
 
+  def GetBetAmount(self):
+    return self._amount
 
-def Raise(Action):
+
+class Raise(Action):
   def __init__(self, amount):
-    super(self, Raise).__init__(Action.RAISE)
+    super(Raise, self).__init__(Action.RAISE)
     self._amount = amount
+
+  def GetRaiseAmount(self):
+    return self._amount
 
 
 class Player(object):
@@ -55,8 +64,17 @@ class Player(object):
     The player always folds.
   """
 
-  def __init__(self):
+  def __init__(self, chips):
     self._hole_cards = []
+    self._chips = chips
+
+  def ModifyChips(self, delta):
+    """Modifies the amount of cash this player has.
+
+    Args:
+      delta: (int) Positive or negative number of chips
+    """
+    self._chips += delta
 
   def SetHoleCards(self, hole_cards):
     """Sets the hole cards this player has.
@@ -64,9 +82,9 @@ class Player(object):
       Must either be [] indicating no current deal, or must be a list of two
       cards.
 
-      Args:
-        (list of int) List of 0 or 2 cards. The ints are the deuces library
-          representation of cards.
+    Args:
+      (list of int) List of 0 or 2 cards. The ints are the deuces library
+        representation of cards.
     """
     if len(hole_cards) != 0 and len(hole_cards) != 2:
       raise ValueError(
@@ -123,16 +141,27 @@ class Player(object):
     """
     pass
 
-  def MakeDecision(self, deal_data):
+  def MakeDecision(self, deal_data, curr_bet, to_call, min_raise):
     """Callback for when it's time for the player to make a decision.
 
     Args:
       deal_data: (Deal) Details of the current deal.
+      curr_bet: (int) Current bet in chips that you need to match.
+      to_call: (int) Number of chips needed to call.
+      min_raise: (int) Minimum number of chips to raise by. This is a delta
+        above the current bet, so if you raise by x, the make the new bet
+        curr_bet + x. This value is None if you are not allowed to raise (i.e.
+        your raise would actually be a bet).
 
     Return:
       (Action) fold, call, check, bet, or raise.
+        * You can fold at any time.
+        * You can check any time to_call == 0
+        * You can call any time to_call > 0, provided you have enough chips.
+        * You can bet any time to_call == 0
+        * You can raise by at least min_raise any time to_call > 0.
     """
-    return Action.FOLD
+    return Fold()
 
   def OnDealOver(self, deal_data, event):
     """Callback for when the deal is over.
@@ -142,4 +171,13 @@ class Player(object):
       event: (Event) Details about the ending of the deal (i.e. who won)
     """
     pass
+
+  def OnError(self, err):
+    """Callback for an error.
+
+    Args:
+      err: (Exception) Any exception that occurred due to the player's faulty
+        logic.
+    """
+    raise err
 

@@ -25,27 +25,28 @@ class MockPlayer(pokerai.game.player.Player):
       "bet": pokerai.game.player.Bet,
       "raise": pokerai.game.player.Raise,
     }
-    return MockPlayer([(str_to_action[a] if type(a) == str else
+    return MockPlayer([(str_to_action[a]() if type(a) == str else
                         str_to_action[a[0]](*a[1:]))
                       for a in action_list])
 
-  def __init__(self, predef_actions):
+  def __init__(self, predef_actions, chips=10):
     """Creates a mock player who will execute a predefined sequence of actions.
 
     Args:
       predef_actions: (list of Action) The actions the mock player should
         execute
     """
+    super(MockPlayer, self).__init__(chips)
     self._predefined_actions = predef_actions
     self._curr_action_idx = 0
 
-  def MakeDecision(self, round_data):
+  def MakeDecision(self, deal_data, curr_bet, to_call, min_raise):
     action = self._predefined_actions[self._curr_action_idx]
     self._curr_action_idx += 1
     return action
 
 
-def CreateMockPlayers(actions):
+def CreateMockPlayers(actions, chips=None):
   """Creates mock players that will perform the given actions.
 
     Args:
@@ -57,5 +58,10 @@ def CreateMockPlayers(actions):
       (list of MockPlayer) list of mock players that will execute the specified
         actions.
   """
-  return [MockPlayer.FromActionList(a) for a in actions]
+  if type(chips) == list:
+    return [MockPlayer.FromActionList(a, c) for (a, c) in zip(actions, chips)]
+  elif type(chips) == int:
+    return [MockPlayer.FromActionList(a, chips) for a in actions]
+  else:
+    return [MockPlayer.FromActionList(a) for a in actions]
 
