@@ -53,6 +53,37 @@ class Raise(Action):
     return self._amount
 
 
+class DealEndEvent(object):
+  """Event that is broadcasted when the deal ends and someone wins.
+  """
+
+  def __init__(self, winner):
+    """Creates an event describing who won the deal.
+
+    Args:
+      winner: (Player) The player who won. The state of the player is after
+        the receive their chips.
+    """
+    pass
+
+
+class PlayerEvent(object):
+  """An event pertinent to a specific player that occurred during a deal.
+
+  Typically, this is created for actions like FOLD or BET.
+  """
+
+  def __init__(self, player, curr_action):
+    """Creates an event indicating the given player
+
+    Args:
+      player: (Player) The index of the player who caused this event
+      curr_action: (Action) The action the player just made, e.g. FOLD
+    """
+    self._player = player
+    self._curr_action = curr_action
+
+
 class Player(object):
   """Base class representing a player:
     * The cards the player has.
@@ -67,6 +98,16 @@ class Player(object):
   def __init__(self, chips):
     self._hole_cards = []
     self._chips = chips
+
+  def GetPublicView(self):
+    """Returns a copy of this player's public data. The clone can be safely
+    altered without affecting this player.
+
+    Returns:
+      (Player) A public, modifiable clone. The player's chips will be set, but
+        their hole cards will not.
+    """
+    return Player(self._chips)
 
   def ModifyChips(self, delta):
     """Modifies the amount of cash this player has.
@@ -91,53 +132,15 @@ class Player(object):
           "Invalid hole cards. Must be 0 or 2 hole cards. You provided %d hole "
           "cards." %(len(hole_cards)))
 
-  def OnFolded(self, deal_data, event):
-    """Callback for when another player folds.
+  def OnPlayerEvent(self, deal_data, event):
+    """Callback for when another player makes an action.
+
+    The deal data and player data represent the state of the game AFTER the
+    action took place.
 
     Args:
-      deal_data: (Deal) Details of the current deal after the player
-        folded.
-      event: (Event) Details about the fold.
-    """
-    pass
-
-  def OnChecked(self, deal_data, event):
-    """Callback for when another player checks.
-
-    Args:
-      deal_data: (Deal) Details of the current deal after the player
-        checked.
-      event: (Event) Details about the check.
-    """
-    pass
-
-  def OnCalled(self, deal_data, event):
-    """Callback for when another player calls.
-
-    Args:
-      deal_data: (Deal) Details of the current deal after the player
-        called.
-      event: (Event) Details about the call.
-    """
-    pass
-
-  def OnBet(self, deal_data, event):
-    """Callback for when another player bet.
-
-    Args:
-      deal_data: (Deal) Details of the current deal after the player
-        bet.
-      event: (Event) Details about the bet.
-    """
-    pass
-
-  def OnRaised(self, deal_data, event):
-    """Callback for when another player makes a decision.
-
-    Args:
-      deal_data: (Deal) Details of the current deal after the player
-        raised.
-      event: (Event) Details about the raise.
+      deal_data: (DealData) Details of the current deal.
+      event: (PlayerEvent) The event that occurred.
     """
     pass
 
@@ -145,7 +148,7 @@ class Player(object):
     """Callback for when it's time for the player to make a decision.
 
     Args:
-      deal_data: (Deal) Details of the current deal.
+      deal_data: (DealData) Details of the current deal.
       curr_bet: (int) Current bet in chips that you need to match.
       to_call: (int) Number of chips needed to call.
       min_raise: (int) Minimum number of chips to raise by. This is a delta
@@ -168,7 +171,7 @@ class Player(object):
 
     Args:
       deal_data: (Deal) Details of the current deal.
-      event: (Event) Details about the ending of the deal (i.e. who won)
+      event: (DealEndEvent) Details about the ending of the deal (i.e. who won)
     """
     pass
 

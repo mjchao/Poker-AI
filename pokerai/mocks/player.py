@@ -40,6 +40,9 @@ class MockPlayer(pokerai.game.player.Player):
     self._predefined_actions = predef_actions
     self._curr_action_idx = 0
 
+  def OnPlayerEvent(self, deal_data, event):
+    pass
+
   def MakeDecision(self, deal_data, curr_bet, to_call, min_raise):
     action = self._predefined_actions[self._curr_action_idx]
     self._curr_action_idx += 1
